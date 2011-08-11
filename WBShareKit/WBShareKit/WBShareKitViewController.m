@@ -77,6 +77,15 @@
     [[WBShareKit mainShare] sendTxRecordWithStatus:@"WBShareKit Photo test" lat:0 lng:0 format:@"json" path:[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"] delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
 }
 
+- (IBAction)StartTwitter:(id)sender {
+    [[WBShareKit mainShare] setDelegate:self];
+    [[WBShareKit mainShare] startTwitterOauthWithSelector:@selector(twitterSuccess:) withFailedSelector:@selector(twitterError:)];
+}
+
+- (IBAction)StartSendTwitter:(id)sender {
+    [[WBShareKit mainShare] sendTwitterWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
+}
+
 
 #pragma mark sina delegate
 - (void)sinaSuccess:(NSData *)_data
@@ -128,7 +137,6 @@
 }
 
 #pragma mark tx delegate
-#pragma mark sina delegate
 - (void)txSuccess:(NSData *)_data
 {
     NSLog(@"tx ok:%@",_data);
@@ -137,6 +145,17 @@
 - (void)txError:(NSError *)_error
 {
     NSLog(@"tx error:%@",_error);
+}
+
+#pragma mark twitter delegate
+- (void)twitterSuccess:(NSData *)_data
+{
+    NSLog(@"twitter ok:%@",_data);
+}
+
+- (void)twitterError:(NSError *)_error
+{
+    NSLog(@"twitter error:%@",_error);
 }
 
 @end

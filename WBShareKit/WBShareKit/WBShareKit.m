@@ -196,6 +196,52 @@ static WBShareKit *_shareKit;
 }
 
 #pragma mark -
+- (OAMutableURLRequest *)twitterRequestWithURL:(NSString *)_url dic:(NSDictionary *)_dic method:(NSString *)_method
+{
+	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+	OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+	
+	OAToken *token = nil;
+	
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    NSString *strAccess = [info valueForKey:@"WBShareKit_twitterToken"];
+    
+	if (nil != strAccess) {
+		token = [[[OAToken alloc] initWithHTTPResponseBody:strAccess] autorelease];
+		//NSLog(@"%@,%@",token.secret,token.key);
+	}
+	
+	OAMutableURLRequest *hmacSha1Request = [[[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:_url]
+																			consumer:consumer
+																			   token:token
+																			   realm:NULL
+																   signatureProvider:hmacSha1Provider
+																			   nonce:[self _generateNonce]
+																		   timestamp:[self _generateTimestamp]] autorelease];
+	
+	//	OARequestParameter *pa1 = [[OARequestParameter alloc] initWithName:@"x_auth_username" value:strUserName];
+	//	OARequestParameter *pa2 = [[OARequestParameter alloc] initWithName:@"x_auth_password" value:strUserPwd];
+	//	OARequestParameter *pa3 = [[OARequestParameter alloc] initWithName:@"x_auth_mode" value:@"client_auth"];
+	if (nil != _dic) {
+		for (NSString *key in [_dic allKeys]) {
+			[hmacSha1Request setOAuthParameterName:key withValue:[_dic valueForKey:key]];
+		}
+	}
+	
+    //    [hmacSha1Request setOAuthParameterName:@"oauth_verifier" withValue:[info valueForKey:@"WBShareKit_ver"]];
+	
+	//[hmacSha1Request1 setParameters:[NSArray arrayWithObjects:pa1,pa2,pa3,nil]];
+	if (nil != _method) {
+		[hmacSha1Request setHTTPMethod:_method];
+	}
+	
+	[hmacSha1Provider release];
+	[consumer release];
+	//[hmacSha1Request1 release];
+	return hmacSha1Request;
+}
+
+#pragma mark -
 #pragma mark sina
 - (void)startSinaOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel
 {
@@ -818,6 +864,148 @@ static WBShareKit *_shareKit;
     [postbody release];
 }
 
+#pragma mark -
+#pragma mark twitter
+- (void)startTwitterOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel
+{
+    NSString *strSSel = NSStringFromSelector(_sSel);
+    NSString *strESel = NSStringFromSelector(_eSel);
+    
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:strSSel forKey:@"WBShareKit_SSel"];
+    [info setValue:strESel forKey:@"WBShareKit_ESel"];
+    [info synchronize];
+    
+    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+	
+	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:TWITTERRequestURL]
+                                                                           consumer:consumer
+                                                                              token:NULL
+                                                                              realm:NULL
+                                                                  signatureProvider:hmacSha1Provider
+                                                                              nonce:[self _generateNonce]
+                                                                          timestamp:[self _generateTimestamp]];
+    [hmacSha1Request setHTTPMethod:@"GET"];
+    [hmacSha1Request setParameters:[NSArray arrayWithObjects:[[OARequestParameter alloc] initWithName:@"oauth_callback" value:@"oauth://minroad.com"],nil]];
+    
+    [hmacSha1Request prepare];
+	
+    OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(twitterRequestTokenTicket:finishedWithData:) didFailSelector:@selector(twitterRequestTokenTicket:failedWithError:)];
+    [fetcher start];
+    [fetcher release];
+}
+
+- (void)twitterRequestTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
+	NSLog(@"twitter 获取未授权token失败 错误:%@",error);
+}
+
+
+- (void)twitterRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
+    
+    NSString *responseBody = [[NSString alloc] initWithData:data
+                                                   encoding:NSUTF8StringEncoding];
+    NSLog(@"获得未授权的KEY:%@",responseBody);
+    
+    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
+    
+    NSString *tt = [token.key URLEncodedString];
+    NSString *url = [NSString stringWithFormat:@"%@?oauth_token=%@&oauth_callback=%@",TWITTERAuthorizeURL,tt,CallBackURL];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
+    [info setValue:@"twitter" forKey:@"WBShareKit_type"];
+    [info synchronize];
+}
+
+- (void)startTwitterAccess
+{
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
+    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+    
+	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",TWITTERAccessURL]]
+                                                                           consumer:consumer
+                                                                              token:token
+                                                                              realm:NULL
+                                                                  signatureProvider:hmacSha1Provider
+                                                                              nonce:[self _generateNonce]
+                                                                          timestamp:[self _generateTimestamp]];
+	[hmacSha1Request setHTTPMethod:@"GET"];
+    
+    [hmacSha1Request prepare];
+    
+    OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(twitterAccessTokenTicket:finishedWithData:) didFailSelector:@selector(twitterAccessTokenTicket:failedWithError:)];
+    [fetcher start];
+    [fetcher release];
+}
+
+- (void)twitterAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
+	NSLog(@"twitter 获取access token失败 错误:%@",error);
+    
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
+    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
+}
+
+
+- (void)twitterAccessTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                    encoding:NSUTF8StringEncoding] autorelease];
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:responseBody forKey:@"WBShareKit_twitterToken"];
+    [info synchronize];
+    
+    NSLog(@"获取access token:%@",responseBody);
+    
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
+    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+}
+
+#pragma mark -
+- (void)sendTwitterWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel
+{
+    _successSEL = _sSel;
+    _failSEL = _eSel;
+    
+    NSMutableString *url = [NSMutableString stringWithFormat:@"http://api.twitter.com/1/statuses/update.json",TWITTERAPPKEY];
+    NSMutableString *body = [NSMutableString stringWithString:@""];
+	if ([_status length] != 0) {
+		[body appendFormat:@"status=%@",[[self replaceURLPlus:_status] URLEncodedString]];
+	}
+    if (_lat != 0) {
+		[body appendFormat:@"&lat=%f",_lat];
+	}
+	if (_lng != 0) {
+		[body appendFormat:@"&long=%f",_lng];
+	}
+	
+	OAMutableURLRequest *request = [self twitterRequestWithURL:url
+                                                        dic:nil 
+                                                     method:@"POST"];
+	
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	
+    int contentLength = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setValue:[NSString stringWithFormat:@"%d", contentLength] forHTTPHeaderField:@"Content-Length"];
+	
+	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	[request prepare];
+	
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
+	[addRecordFetcher initWithRequest:request 
+                             delegate:_delegate
+                    didFinishSelector:_sSel
+                      didFailSelector:_eSel];
+	[addRecordFetcher start];
+}
+
 #pragma mark app delegate
 - (void)handleOpenURL:(NSURL *)url
 {
@@ -845,6 +1033,10 @@ static WBShareKit *_shareKit;
         //	[info setValue:[url query] forKey:@"WBShareKit_responseBody"];
         [info synchronize];
         [self startTxAccessWithVerifier:string];
+    }
+    else if ([type isEqualToString:@"twitter"])
+    {
+        [self startTwitterAccess];
     }
     
 }
