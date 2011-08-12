@@ -282,8 +282,8 @@ static WBShareKit *_shareKit;
 
 - (void)sinaRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
     
-    NSString *responseBody = [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding];
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                   encoding:NSUTF8StringEncoding] autorelease];
     NSLog(@"获得未授权的KEY:%@",responseBody);
     
     OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
@@ -297,7 +297,8 @@ static WBShareKit *_shareKit;
     [info setValue:@"sina" forKey:@"WBShareKit_type"];
     [info synchronize];
     
-    [responseBody release];
+    [token release];
+//    [responseBody release];
 }
 
 - (void)startSinaAccessWithVerifier:(NSString *)_ver
@@ -347,6 +348,8 @@ static WBShareKit *_shareKit;
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
     id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+    
+//    [responseBody release];
 }
 
 #pragma mark -
@@ -387,6 +390,7 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_sSel
                       didFailSelector:_eSel];
 	[addRecordFetcher start];
+//    [addRecordFetcher release];
 }
 
 - (NSString*) nameValString: (NSDictionary*) dict {
@@ -486,6 +490,7 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_successSEL
                       didFailSelector:_failSEL];
 	[addRecordFetcher start];
+//    [addRecordFetcher release];
 }
 
 #pragma mark -
@@ -528,8 +533,8 @@ static WBShareKit *_shareKit;
 
 - (void)doubanRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
     
-    NSString *responseBody = [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding];
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                   encoding:NSUTF8StringEncoding] autorelease];
     NSLog(@"获得未授权的KEY:%@",responseBody);
     
     OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
@@ -542,6 +547,9 @@ static WBShareKit *_shareKit;
 	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
     [info setValue:@"douban" forKey:@"WBShareKit_type"];
     [info synchronize];
+    
+    [token release];
+//    [responseBody release];
 }
 
 - (void)startDoubanAccess
@@ -591,6 +599,8 @@ static WBShareKit *_shareKit;
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
     id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+    
+//    [responseBody release];
 }
 
 #pragma mark -
@@ -628,6 +638,7 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_sSel
                       didFailSelector:_eSel];
 	[addRecordFetcher start];
+//    [addRecordFetcher release];
 }
 
 #pragma mark -
@@ -645,13 +656,13 @@ static WBShareKit *_shareKit;
     OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TXAPPKEY secret:TXAPPSECRET];
 	
 	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:TXRequestURL]
+	OAMutableURLRequest *hmacSha1Request = [[[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:TXRequestURL]
                                                                            consumer:consumer
                                                                               token:NULL
                                                                               realm:NULL
                                                                   signatureProvider:hmacSha1Provider
                                                                               nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
+                                                                          timestamp:[self _generateTimestamp]] autorelease];
 //    [hmacSha1Request setOAuthParameterName:@"oauth_callback" withValue:CallBackURL];
     [hmacSha1Request setHTTPMethod:@"GET"];
     [hmacSha1Request setParameters:[NSArray arrayWithObject:[OARequestParameter requestParameterWithName:@"oauth_callback" value:CallBackURL]]];
@@ -662,6 +673,8 @@ static WBShareKit *_shareKit;
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(txRequestTokenTicket:finishedWithData:) didFailSelector:@selector(txRequestTokenTicket:failedWithError:)];
     [fetcher start];
     [fetcher release];
+    
+    [consumer release];
 }
 
 - (void)txRequestTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
@@ -671,8 +684,8 @@ static WBShareKit *_shareKit;
 
 - (void)txRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
     
-    NSString *responseBody = [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding];
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                   encoding:NSUTF8StringEncoding] autorelease];
     NSLog(@"获得未授权的KEY:%@",responseBody);
     
     OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
@@ -685,6 +698,9 @@ static WBShareKit *_shareKit;
 	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
     [info setValue:@"tx" forKey:@"WBShareKit_type"];
     [info synchronize];
+    
+    [token release];
+//    [responseBody release];
 }
 
 - (void)startTxAccessWithVerifier:(NSString *)_ver
@@ -694,13 +710,13 @@ static WBShareKit *_shareKit;
     OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
     OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
     
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?oauth_verifier=%@",TXAccessURL,_ver]]
+	OAMutableURLRequest *hmacSha1Request = [[[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?oauth_verifier=%@",TXAccessURL,_ver]]
                                                                            consumer:consumer
                                                                               token:token
                                                                               realm:NULL
                                                                   signatureProvider:hmacSha1Provider
                                                                               nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
+                                                                          timestamp:[self _generateTimestamp]] autorelease];
 	[hmacSha1Request setHTTPMethod:@"GET"];
     [hmacSha1Request setParameters:[NSArray arrayWithObject:[OARequestParameter requestParameterWithName:@"oauth_verifier" value:_ver]]];
     NSString *url = [NSString stringWithFormat:@"%@?oauth_verifier=%@&%@",TXAccessURL,_ver,[hmacSha1Request txBaseString]];
@@ -713,6 +729,10 @@ static WBShareKit *_shareKit;
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(txAccessTokenTicket:finishedWithData:) didFailSelector:@selector(txAccessTokenTicket:failedWithError:)];
     [fetcher start];
     [fetcher release];
+    
+    [token release];
+    [hmacSha1Provider release];
+    [consumer release];
 }
 
 - (void)txAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
@@ -737,6 +757,8 @@ static WBShareKit *_shareKit;
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
     id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+    
+//    [responseBody release];
 }
 
 #pragma mark -
@@ -782,6 +804,9 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_sSel
                       didFailSelector:_eSel];
 	[addRecordFetcher start];
+//    [addRecordFetcher release];
+    
+    [parameters release];
 }
 
 - (void)sendTxRecordWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng format:(NSString *)_format path:(NSString *)_path delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel
@@ -871,7 +896,8 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_sSel
                       didFailSelector:_eSel];
 	[addRecordFetcher start];
-    
+//    [addRecordFetcher release];
+    [parameters release];
     [postbody release];
 }
 
@@ -917,8 +943,8 @@ static WBShareKit *_shareKit;
 
 - (void)twitterRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
     
-    NSString *responseBody = [[NSString alloc] initWithData:data
-                                                   encoding:NSUTF8StringEncoding];
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                   encoding:NSUTF8StringEncoding] autorelease];
     NSLog(@"获得未授权的KEY:%@",responseBody);
     
     OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
@@ -931,6 +957,9 @@ static WBShareKit *_shareKit;
 	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
     [info setValue:@"twitter" forKey:@"WBShareKit_type"];
     [info synchronize];
+    
+    [token release];
+//    [responseBody release];
 }
 
 - (void)startTwitterAccess
@@ -980,6 +1009,8 @@ static WBShareKit *_shareKit;
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
     id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+    
+//    [responseBody release];
 }
 
 #pragma mark -
@@ -1020,6 +1051,7 @@ static WBShareKit *_shareKit;
                     didFinishSelector:_sSel
                       didFailSelector:_eSel];
 	[addRecordFetcher start];
+//    [addRecordFetcher release];
 }
 
 #pragma mark app delegate

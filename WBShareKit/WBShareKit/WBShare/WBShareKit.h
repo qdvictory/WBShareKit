@@ -11,7 +11,7 @@
 #import "OAToken.h"
 #import "OAServiceTicket.h"
 #import "WBShareKey.h"
-#import "WBSinaApi.h"
+#import "WBRequest.h"
 
 @interface WBShareKit : NSObject
 {
