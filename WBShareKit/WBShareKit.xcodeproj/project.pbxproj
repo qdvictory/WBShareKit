@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6548D01713F4D6500092B22B /* WBShareKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6548D01613F4D6500092B22B /* WBShareKit.m */; };
+		6548D01A13F4D6630092B22B /* WBRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6548D01913F4D6630092B22B /* WBRequest.m */; };
 		65DB23FE13F0106900B59C2F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DB23FD13F0106900B59C2F /* UIKit.framework */; };
 		65DB240013F0106900B59C2F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DB23FF13F0106900B59C2F /* Foundation.framework */; };
 		65DB240213F0106900B59C2F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DB240113F0106900B59C2F /* CoreGraphics.framework */; };
@@ -29,13 +31,17 @@
 		65DB244613F010C100B59C2F /* OARequestParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DB243513F010C100B59C2F /* OARequestParameter.m */; };
 		65DB244713F010C100B59C2F /* OAServiceTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DB243713F010C100B59C2F /* OAServiceTicket.m */; };
 		65DB244813F010C100B59C2F /* OAToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DB243A13F010C100B59C2F /* OAToken.m */; };
-		65DB244B13F010E400B59C2F /* WBShareKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 65DB244A13F010E400B59C2F /* WBShareKit.m */; };
 		65DB245013F02B8300B59C2F /* WBShareKit.png in Resources */ = {isa = PBXBuildFile; fileRef = 65DB244F13F02B8300B59C2F /* WBShareKit.png */; };
 		65EB81A713F17A94000CA36C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 65EB81A513F17A94000CA36C /* Icon.png */; };
 		65EB81A813F17A94000CA36C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65EB81A613F17A94000CA36C /* Icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6548D01413F4D6500092B22B /* WBShareKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBShareKey.h; sourceTree = "<group>"; };
+		6548D01513F4D6500092B22B /* WBShareKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBShareKit.h; sourceTree = "<group>"; };
+		6548D01613F4D6500092B22B /* WBShareKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBShareKit.m; sourceTree = "<group>"; };
+		6548D01813F4D6630092B22B /* WBRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBRequest.h; sourceTree = "<group>"; };
+		6548D01913F4D6630092B22B /* WBRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBRequest.m; sourceTree = "<group>"; };
 		65DB23F913F0106900B59C2F /* WBShareKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WBShareKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DB23FD13F0106900B59C2F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		65DB23FF13F0106900B59C2F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -78,9 +84,6 @@
 		65DB243913F010C100B59C2F /* OAToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAToken.h; sourceTree = "<group>"; };
 		65DB243A13F010C100B59C2F /* OAToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAToken.m; sourceTree = "<group>"; };
 		65DB243B13F010C100B59C2F /* OAuthConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthConsumer.h; sourceTree = "<group>"; };
-		65DB244913F010E400B59C2F /* WBShareKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBShareKit.h; sourceTree = "<group>"; };
-		65DB244A13F010E400B59C2F /* WBShareKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBShareKit.m; sourceTree = "<group>"; };
-		65DB244C13F0121F00B59C2F /* WBShareKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBShareKey.h; sourceTree = "<group>"; };
 		65DB244F13F02B8300B59C2F /* WBShareKit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WBShareKit.png; sourceTree = "<group>"; };
 		65EB81A513F17A94000CA36C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		65EB81A613F17A94000CA36C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
@@ -100,6 +103,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6548D01113F4D6500092B22B /* WBShare */ = {
+			isa = PBXGroup;
+			children = (
+				6548D01213F4D6500092B22B /* BaseClass */,
+				6548D01313F4D6500092B22B /* Servers */,
+				6548D01413F4D6500092B22B /* WBShareKey.h */,
+				6548D01513F4D6500092B22B /* WBShareKit.h */,
+				6548D01613F4D6500092B22B /* WBShareKit.m */,
+			);
+			path = WBShare;
+			sourceTree = "<group>";
+		};
+		6548D01213F4D6500092B22B /* BaseClass */ = {
+			isa = PBXGroup;
+			children = (
+				6548D01813F4D6630092B22B /* WBRequest.h */,
+				6548D01913F4D6630092B22B /* WBRequest.m */,
+			);
+			path = BaseClass;
+			sourceTree = "<group>";
+		};
+		6548D01313F4D6500092B22B /* Servers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Servers;
+			sourceTree = "<group>";
+		};
 		65DB23EE13F0106900B59C2F = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +161,7 @@
 		65DB240313F0106900B59C2F /* WBShareKit */ = {
 			isa = PBXGroup;
 			children = (
+				6548D01113F4D6500092B22B /* WBShare */,
 				65DB241D13F010C100B59C2F /* Oauth */,
 				65DB240C13F0106900B59C2F /* WBShareKitAppDelegate.h */,
 				65DB240D13F0106900B59C2F /* WBShareKitAppDelegate.m */,
@@ -138,9 +170,6 @@
 				65DB241313F0106900B59C2F /* WBShareKitViewController.m */,
 				65DB241513F0106900B59C2F /* WBShareKitViewController.xib */,
 				65DB240413F0106900B59C2F /* Supporting Files */,
-				65DB244913F010E400B59C2F /* WBShareKit.h */,
-				65DB244A13F010E400B59C2F /* WBShareKit.m */,
-				65DB244C13F0121F00B59C2F /* WBShareKey.h */,
 			);
 			path = WBShareKit;
 			sourceTree = "<group>";
@@ -292,7 +321,8 @@
 				65DB244613F010C100B59C2F /* OARequestParameter.m in Sources */,
 				65DB244713F010C100B59C2F /* OAServiceTicket.m in Sources */,
 				65DB244813F010C100B59C2F /* OAToken.m in Sources */,
-				65DB244B13F010E400B59C2F /* WBShareKit.m in Sources */,
+				6548D01713F4D6500092B22B /* WBShareKit.m in Sources */,
+				6548D01A13F4D6630092B22B /* WBRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

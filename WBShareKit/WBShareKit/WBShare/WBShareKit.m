@@ -253,23 +253,26 @@ static WBShareKit *_shareKit;
     [info setValue:strESel forKey:@"WBShareKit_ESel"];
     [info synchronize];
     
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:SINAAPPKEY secret:SINAAPPSECRET];
-	
-	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:SINARequestURL]
-                                                                           consumer:consumer
-                                                                              token:NULL
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-    [hmacSha1Request setHTTPMethod:@"GET"];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:SINAAPPKEY secret:SINAAPPSECRET];
+//	
+//	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:SINARequestURL]
+//                                                                           consumer:consumer
+//                                                                              token:NULL
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//    [hmacSha1Request setHTTPMethod:@"GET"];
+//    
+//    [hmacSha1Request prepare];
+//	
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:SINARequestURL dic:nil method:@"GET" withServers:@"sina" requestToken:YES accessToken:NO];
     
-    [hmacSha1Request prepare];
-	
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(sinaRequestTokenTicket:finishedWithData:) didFailSelector:@selector(sinaRequestTokenTicket:failedWithError:)];
     [fetcher start];
     [fetcher release];
+
 }
 
 - (void)sinaRequestTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
@@ -293,25 +296,29 @@ static WBShareKit *_shareKit;
 	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
     [info setValue:@"sina" forKey:@"WBShareKit_type"];
     [info synchronize];
+    
+    [responseBody release];
 }
 
 - (void)startSinaAccessWithVerifier:(NSString *)_ver
 {
-    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:SINAAPPKEY secret:SINAAPPSECRET];
-    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
-    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:SINAAPPKEY secret:SINAAPPSECRET];
+//    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
+//    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//    
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?oauth_verifier=%@",SINAAccessURL,_ver]]
+//                                                                           consumer:consumer
+//                                                                              token:token
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//	[hmacSha1Request setHTTPMethod:@"GET"];
+//    
+//    [hmacSha1Request prepare];
     
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?oauth_verifier=%@",SINAAccessURL,_ver]]
-                                                                           consumer:consumer
-                                                                              token:token
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-	[hmacSha1Request setHTTPMethod:@"GET"];
-    
-    [hmacSha1Request prepare];
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:SINAAccessURL dic:[NSDictionary dictionaryWithObjectsAndKeys:_ver,@"oauth_verifier", nil] method:@"GET" withServers:@"sina" requestToken:NO accessToken:YES];
     
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(sinaAccessTokenTicket:finishedWithData:) didFailSelector:@selector(sinaAccessTokenTicket:failedWithError:)];
     [fetcher start];
@@ -493,20 +500,22 @@ static WBShareKit *_shareKit;
     [info setValue:strESel forKey:@"WBShareKit_ESel"];
     [info synchronize];
     
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:DOUBANAPPKEY secret:DOUBANAPPSECRET];
-	
-	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:DOUBANRequestURL]
-                                                                           consumer:consumer
-                                                                              token:NULL
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-    [hmacSha1Request setHTTPMethod:@"GET"];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:DOUBANAPPKEY secret:DOUBANAPPSECRET];
+//	
+//	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:DOUBANRequestURL]
+//                                                                           consumer:consumer
+//                                                                              token:NULL
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//    [hmacSha1Request setHTTPMethod:@"GET"];
+//    
+//    [hmacSha1Request prepare];
+
+	WBRequest *hmacSha1Request = [WBRequest requestWithURL:DOUBANRequestURL dic:nil method:@"GET" withServers:@"douban" requestToken:YES accessToken:NO];
     
-    [hmacSha1Request prepare];
-	
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(doubanRequestTokenTicket:finishedWithData:) didFailSelector:@selector(doubanRequestTokenTicket:failedWithError:)];
     [fetcher start];
     [fetcher release];
@@ -537,21 +546,23 @@ static WBShareKit *_shareKit;
 
 - (void)startDoubanAccess
 {
-    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:DOUBANAPPKEY secret:DOUBANAPPSECRET];
-    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
-    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-    
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",DOUBANAccessURL]]
-                                                                           consumer:consumer
-                                                                              token:token
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-	[hmacSha1Request setHTTPMethod:@"GET"];
-    
-    [hmacSha1Request prepare];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:DOUBANAPPKEY secret:DOUBANAPPSECRET];
+//    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
+//    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//    
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",DOUBANAccessURL]]
+//                                                                           consumer:consumer
+//                                                                              token:token
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//	[hmacSha1Request setHTTPMethod:@"GET"];
+//    
+//    [hmacSha1Request prepare];
+
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:DOUBANAccessURL dic:nil method:@"GET" withServers:@"douban" requestToken:NO accessToken:YES];
     
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(doubanAccessTokenTicket:finishedWithData:) didFailSelector:@selector(doubanAccessTokenTicket:failedWithError:)];
     [fetcher start];
@@ -876,21 +887,24 @@ static WBShareKit *_shareKit;
     [info setValue:strESel forKey:@"WBShareKit_ESel"];
     [info synchronize];
     
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+//	
+//	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:TWITTERRequestURL]
+//                                                                           consumer:consumer
+//                                                                              token:NULL
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//    [hmacSha1Request setHTTPMethod:@"GET"];
+//    [hmacSha1Request setParameters:[NSArray arrayWithObjects:[[OARequestParameter alloc] initWithName:@"oauth_callback" value:@"oauth://minroad.com"],nil]];
+//    
+//    [hmacSha1Request prepare];
+
 	
-	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:TWITTERRequestURL]
-                                                                           consumer:consumer
-                                                                              token:NULL
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-    [hmacSha1Request setHTTPMethod:@"GET"];
-    [hmacSha1Request setParameters:[NSArray arrayWithObjects:[[OARequestParameter alloc] initWithName:@"oauth_callback" value:@"oauth://minroad.com"],nil]];
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:TWITTERRequestURL dic:[NSDictionary dictionaryWithObjectsAndKeys:@"oauth://minroad.com",@"oauth_callback",nil] method:@"GET" withServers:@"twitter" requestToken:YES accessToken:NO];
     
-    [hmacSha1Request prepare];
-	
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(twitterRequestTokenTicket:finishedWithData:) didFailSelector:@selector(twitterRequestTokenTicket:failedWithError:)];
     [fetcher start];
     [fetcher release];
@@ -921,21 +935,23 @@ static WBShareKit *_shareKit;
 
 - (void)startTwitterAccess
 {
-    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
-    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
-    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
-    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
-    
-	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",TWITTERAccessURL]]
-                                                                           consumer:consumer
-                                                                              token:token
-                                                                              realm:NULL
-                                                                  signatureProvider:hmacSha1Provider
-                                                                              nonce:[self _generateNonce]
-                                                                          timestamp:[self _generateTimestamp]];
-	[hmacSha1Request setHTTPMethod:@"GET"];
-    
-    [hmacSha1Request prepare];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+//    OAConsumer *consumer = [[OAConsumer alloc] initWithKey:TWITTERAPPKEY secret:TWITTERAPPSECRET];
+//    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:[info valueForKey:@"WBShareKit_responseBody"]];
+//    OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+//    
+//	OAMutableURLRequest *hmacSha1Request = [[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",TWITTERAccessURL]]
+//                                                                           consumer:consumer
+//                                                                              token:token
+//                                                                              realm:NULL
+//                                                                  signatureProvider:hmacSha1Provider
+//                                                                              nonce:[self _generateNonce]
+//                                                                          timestamp:[self _generateTimestamp]];
+//	[hmacSha1Request setHTTPMethod:@"GET"];
+//    
+//    [hmacSha1Request prepare];
+
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:TWITTERAccessURL dic:nil method:@"GET" withServers:@"twitter" requestToken:NO accessToken:YES];
     
     OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(twitterAccessTokenTicket:finishedWithData:) didFailSelector:@selector(twitterAccessTokenTicket:failedWithError:)];
     [fetcher start];
