@@ -18,6 +18,9 @@
 #define TWITTERAPPKEY @"9CZRoVzLGQerndRrJJWM0w" //设置twitter appkey
 #define TWITTERAPPSECRET @"pdyafzGseNvsBpy9H8i9nUDzUsuQrIMjmGGn7ITAogU"
 
+#define WYAPPKEY @"3WEBUGnYsYzd6SUz" //设置163 appkey
+#define WYAPPSECRET @"GJSDc48rnWKFITlHIMMS0Xho2ahbPfhm"
+
 //豆瓣
 #define DOUBANRequestURL @"http://www.douban.com/service/auth/request_token" //获取未授权request token
 #define DOUBANAuthorizeURL @"http://www.douban.com/service/auth/authorize"  //获取授权request token
@@ -37,5 +40,10 @@
 #define TWITTERRequestURL @"https://api.twitter.com/oauth/request_token" //获取未授权request token
 #define TWITTERAuthorizeURL @"https://api.twitter.com/oauth/authorize"  //获取授权request token
 #define TWITTERAccessURL @"https://api.twitter.com/oauth/access_token"  //获取access token
+
+//网易
+#define WYRequestURL @"http://api.t.163.com/oauth/request_token" //获取未授权request token
+#define WYAuthorizeURL @"http://api.t.163.com/oauth/authenticate"  //获取授权request token
+#define WYAccessURL @"http://api.t.163.com/oauth/access_token"  //获取access token
 
 #define CallBackURL @"oauth://minroad.com"  //回调url

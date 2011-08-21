@@ -56,6 +56,11 @@
         key = TWITTERAPPKEY;
         secret = TWITTERAPPSECRET;
     }
+    else if ([_servers isEqualToString:@"wy"])
+    {
+        key = WYAPPKEY;
+        secret = WYAPPSECRET;
+    }
     
 	OAConsumer *_consumer = [[OAConsumer alloc] initWithKey:key secret:secret];
 	

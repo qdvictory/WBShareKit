@@ -42,4 +42,9 @@
 #pragma mark twitter
 - (void)startTwitterOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel;
 - (void)sendTwitterWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel;
+
+#pragma mark 163
+- (void)startWyOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel;
+- (void)sendWyRecordWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel;
+- (void)sendWyPhotoWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng path:(NSString *)_path delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel;
 @end

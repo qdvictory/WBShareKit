@@ -265,6 +265,7 @@
 		65DB23F013F0106900B59C2F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = Chlova;
 			};
 			buildConfigurationList = 65DB23F313F0106900B59C2F /* Build configuration list for PBXProject "WBShareKit" */;

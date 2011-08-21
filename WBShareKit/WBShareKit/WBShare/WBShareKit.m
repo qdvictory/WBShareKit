@@ -242,6 +242,52 @@ static WBShareKit *_shareKit;
 }
 
 #pragma mark -
+- (OAMutableURLRequest *)wyRequestWithURL:(NSString *)_url dic:(NSDictionary *)_dic method:(NSString *)_method
+{
+	OAHMAC_SHA1SignatureProvider *hmacSha1Provider = [[OAHMAC_SHA1SignatureProvider alloc] init];
+	OAConsumer *consumer = [[OAConsumer alloc] initWithKey:WYAPPKEY secret:WYAPPSECRET];
+	
+	OAToken *token = nil;
+	
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    NSString *strAccess = [info valueForKey:@"WBShareKit_wyToken"];
+    
+	if (nil != strAccess) {
+		token = [[[OAToken alloc] initWithHTTPResponseBody:strAccess] autorelease];
+		//NSLog(@"%@,%@",token.secret,token.key);
+	}
+	
+	OAMutableURLRequest *hmacSha1Request = [[[OAMutableURLRequest alloc] initWithURL:[NSURL URLWithString:_url]
+																			consumer:consumer
+																			   token:token
+																			   realm:NULL
+																   signatureProvider:hmacSha1Provider
+																			   nonce:[self _generateNonce]
+																		   timestamp:[self _generateTimestamp]] autorelease];
+	
+	//	OARequestParameter *pa1 = [[OARequestParameter alloc] initWithName:@"x_auth_username" value:strUserName];
+	//	OARequestParameter *pa2 = [[OARequestParameter alloc] initWithName:@"x_auth_password" value:strUserPwd];
+	//	OARequestParameter *pa3 = [[OARequestParameter alloc] initWithName:@"x_auth_mode" value:@"client_auth"];
+	if (nil != _dic) {
+		for (NSString *key in [_dic allKeys]) {
+			[hmacSha1Request setOAuthParameterName:key withValue:[_dic valueForKey:key]];
+		}
+	}
+	
+    //    [hmacSha1Request setOAuthParameterName:@"oauth_verifier" withValue:[info valueForKey:@"WBShareKit_ver"]];
+	
+	//[hmacSha1Request1 setParameters:[NSArray arrayWithObjects:pa1,pa2,pa3,nil]];
+	if (nil != _method) {
+		[hmacSha1Request setHTTPMethod:_method];
+	}
+	
+	[hmacSha1Provider release];
+	[consumer release];
+	//[hmacSha1Request1 release];
+	return hmacSha1Request;
+}
+
+#pragma mark -
 #pragma mark sina
 - (void)startSinaOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel
 {
@@ -1003,13 +1049,12 @@ static WBShareKit *_shareKit;
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
 	[info setValue:responseBody forKey:@"WBShareKit_twitterToken"];
     [info synchronize];
-    
+
     NSLog(@"获取access token:%@",responseBody);
     
     NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
     id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
-    
 //    [responseBody release];
 }
 
@@ -1054,6 +1099,212 @@ static WBShareKit *_shareKit;
 //    [addRecordFetcher release];
 }
 
+#pragma mark -
+#pragma mark 163
+- (void)startWyOauthWithSelector:(SEL)_sSel withFailedSelector:(SEL)_eSel
+{
+    NSString *strSSel = NSStringFromSelector(_sSel);
+    NSString *strESel = NSStringFromSelector(_eSel);
+    
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:strSSel forKey:@"WBShareKit_SSel"];
+    [info setValue:strESel forKey:@"WBShareKit_ESel"];
+    [info synchronize];
+    
+
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:WYRequestURL dic:nil method:@"GET" withServers:@"wy" requestToken:YES accessToken:NO];
+    
+    OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(wyRequestTokenTicket:finishedWithData:) didFailSelector:@selector(wyRequestTokenTicket:failedWithError:)];
+    [fetcher start];
+    [fetcher release];
+    
+}
+
+- (void)wyRequestTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
+	NSLog(@"wy 获取未授权token失败 错误:%@",error);
+}
+
+
+- (void)wyRequestTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
+    
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                    encoding:NSUTF8StringEncoding] autorelease];
+    NSLog(@"获得未授权的KEY:%@",responseBody);
+    
+    OAToken *token = [[OAToken alloc] initWithHTTPResponseBody:responseBody];
+    
+    NSString *tt = [token.key URLEncodedString];
+    NSString *url = [NSString stringWithFormat:@"%@?oauth_token=%@&oauth_callback=%@",WYAuthorizeURL,tt,CallBackURL];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:responseBody forKey:@"WBShareKit_responseBody"];
+    [info setValue:@"wy" forKey:@"WBShareKit_type"];
+    [info synchronize];
+    
+    [token release];
+    //    [responseBody release];
+}
+
+- (void)startWyAccess
+{
+    WBRequest *hmacSha1Request = [WBRequest requestWithURL:WYAccessURL dic:nil method:@"GET" withServers:@"wy" requestToken:NO accessToken:YES];
+    
+    OAAsynchronousDataFetcher *fetcher = [[OAAsynchronousDataFetcher alloc] initWithRequest:hmacSha1Request delegate:self didFinishSelector:@selector(wyAccessTokenTicket:finishedWithData:) didFailSelector:@selector(wyAccessTokenTicket:failedWithError:)];
+    [fetcher start];
+    [fetcher release];
+}
+
+- (void)wyAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
+	NSLog(@"wy 获取access token失败 错误:%@",error);
+    
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
+    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
+}
+
+
+- (void)wyAccessTokenTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data {
+    NSString *responseBody = [[[NSString alloc] initWithData:data
+                                                    encoding:NSUTF8StringEncoding] autorelease];
+    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+	[info setValue:responseBody forKey:@"WBShareKit_wyToken"];
+    [info synchronize];
+    
+    NSLog(@"获取access token:%@",responseBody);
+    
+    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
+    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
+    
+    //    [responseBody release];
+}
+
+#pragma mark -
+- (void)sendWyRecordWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel
+{
+    _successSEL = _sSel;
+    _failSEL = _eSel;
+    
+    NSMutableString *url = [NSMutableString stringWithFormat:@"http://api.t.163.com/statuses/update.json"];
+    NSMutableString *body = [NSMutableString stringWithString:@""];
+	if ([_status length] != 0) {
+		[body appendFormat:@"status=%@",[[self replaceURLPlus:_status] URLEncodedString]];
+	}
+    if (_lat != 0) {
+		[body appendFormat:@"&lat=%f",_lat];
+	}
+	if (_lng != 0) {
+		[body appendFormat:@"&long=%f",_lng];
+	}
+	
+	OAMutableURLRequest *request = [self wyRequestWithURL:url
+                                                        dic:nil 
+                                                     method:@"POST"];
+	
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	
+    int contentLength = [body lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    
+    [request setValue:[NSString stringWithFormat:@"%d", contentLength] forHTTPHeaderField:@"Content-Length"];
+	
+	[request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	[request prepare];
+	
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
+	[addRecordFetcher initWithRequest:request 
+                             delegate:_delegate
+                    didFinishSelector:_sSel
+                      didFailSelector:_eSel];
+	[addRecordFetcher start];
+    //    [addRecordFetcher release];
+}
+
+
+- (void)sendWyPhotoWithStatus:(NSString *)_status lat:(double)_lat lng:(double)_lng path:(NSString *)_path delegate:(id)_delegate successSelector:(SEL)_sSel failSelector:(SEL)_eSel
+{
+    _successSEL = _sSel;
+    _failSEL = _eSel;
+    
+	NSMutableString *url = [NSMutableString stringWithFormat:@"http://api.t.163.com/statuses/upload.json"];
+    NSDictionary *dic;
+	if (_lat != 0 && _lng != 0) {
+		dic = [NSDictionary dictionaryWithObjectsAndKeys:
+			   [[self replaceURLPlus:_status] URLEncodedString] , @"status",
+			   WYAPPKEY, @"source",
+			   [NSString stringWithFormat:@"%f",_lat],@"lat",
+			   [NSString stringWithFormat:@"%f",_lng],@"long",
+			   nil];
+	}
+	else {
+		dic = [NSDictionary dictionaryWithObjectsAndKeys:
+               [[self replaceURLPlus:_status] URLEncodedString] , @"status",
+               WYAPPKEY, @"source",
+               nil];
+	}
+	
+	int i;
+	NSArray *names = [dic allKeys];
+	for (i = 0; i < [names count]; i++) {
+		if (i == 0) {
+			[url appendString:@"?"];
+		} else if (i > 0) {
+			[url appendString:@"&"];
+		}
+		NSString *name = [names objectAtIndex:i];
+		[url appendString:[NSString stringWithFormat:@"%@=%@", 
+						   name,[[dic objectForKey:name] URLEncodedString]]];
+	}
+	
+	
+	NSString *param = [self nameValString:dic];
+    NSString *footer = [NSString stringWithFormat:@"\r\n--%@--\r\n", WBShareKit_BOUNDARY];
+    
+    param = [param stringByAppendingString:[NSString stringWithFormat:@"--%@\r\n", WBShareKit_BOUNDARY]];
+    param = [param stringByAppendingString:@"Content-Disposition: form-data; name=\"pic\";filename=\"image.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n"];
+    
+	NSData *jpeg = UIImageJPEGRepresentation([UIImage imageWithContentsOfFile:_path], 0.55);
+	//NSLog(@"jpeg size: %d", [jpeg length]);
+	
+    NSMutableData *data = [NSMutableData data];
+    [data appendData:[param dataUsingEncoding:NSUTF8StringEncoding]];
+    [data appendData:jpeg];
+    [data appendData:[footer dataUsingEncoding:NSUTF8StringEncoding]];
+	
+    //    NSLog(@"%@,%@",param,footer);
+	//NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:0];
+    //	[params setObject:APPKEY forKey:@"source"];
+    //	[params setObject:_status forKey:@"status"];
+	
+	
+	OAMutableURLRequest *request = [self wyRequestWithURL:url
+                                                        dic:nil 
+                                                     method:@"POST"];
+	
+	//[request setParameters:params];
+	
+	
+	
+	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", WBShareKit_BOUNDARY];
+    [request setHTTPShouldHandleCookies:NO];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
+    [request setValue:[NSString stringWithFormat:@"%d", [data length]] forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:data];
+    
+    [request prepare];
+	
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
+	[addRecordFetcher initWithRequest:request 
+                             delegate:_delegate
+                    didFinishSelector:_successSEL
+                      didFailSelector:_failSEL];
+	[addRecordFetcher start];
+    //    [addRecordFetcher release];
+}
+
 #pragma mark app delegate
 - (void)handleOpenURL:(NSURL *)url
 {
@@ -1085,6 +1336,10 @@ static WBShareKit *_shareKit;
     else if ([type isEqualToString:@"twitter"])
     {
         [self startTwitterAccess];
+    }
+    else if ([type isEqualToString:@"wy"])
+    {
+        [self startWyAccess];
     }
     
 }

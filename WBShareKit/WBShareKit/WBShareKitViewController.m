@@ -86,6 +86,19 @@
     [[WBShareKit mainShare] sendTwitterWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
 }
 
+- (IBAction)StartWy:(id)sender {
+    [[WBShareKit mainShare] setDelegate:self];
+    [[WBShareKit mainShare] startWyOauthWithSelector:@selector(wySuccess:) withFailedSelector:@selector(wyError:)];
+}
+
+- (IBAction)StartSendWyWeibo:(id)sender {
+    [[WBShareKit mainShare] sendWyRecordWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
+}
+
+- (IBAction)StartSendWyPhotoWeibo:(id)sender {
+    [[WBShareKit mainShare] sendWyPhotoWithStatus:@"WBShareKit Photo test" lat:0 lng:0 path:[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"] delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
+}
+
 
 #pragma mark sina delegate
 - (void)sinaSuccess:(NSData *)_data
@@ -101,7 +114,8 @@
 - (void)sendRecordTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data
 {
     NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"发送新浪微博成功" message:string delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    NSLog(@"%@",string);
+    UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"发送微博成功" message:string delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [al show];
     [al release];
     
@@ -156,6 +170,17 @@
 - (void)twitterError:(NSError *)_error
 {
     NSLog(@"twitter error:%@",_error);
+}
+
+#pragma mark 163 delegate
+- (void)wySuccess:(NSData *)_data
+{
+    NSLog(@"wy ok:%@",_data);
+}
+
+- (void)wyError:(NSError *)_error
+{
+    NSLog(@"wy error:%@",_error);
 }
 
 @end

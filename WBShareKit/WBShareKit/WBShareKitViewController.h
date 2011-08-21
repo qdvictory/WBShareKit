@@ -20,4 +20,7 @@
 - (IBAction)StartTXPhotoWeibo:(id)sender;
 - (IBAction)StartTwitter:(id)sender;
 - (IBAction)StartSendTwitter:(id)sender;
+- (IBAction)StartWy:(id)sender;
+- (IBAction)StartSendWyWeibo:(id)sender;
+- (IBAction)StartSendWyPhotoWeibo:(id)sender;
 @end
