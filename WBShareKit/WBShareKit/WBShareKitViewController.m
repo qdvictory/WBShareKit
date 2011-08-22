@@ -42,7 +42,7 @@
 }
 
 - (IBAction)StartSina:(id)sender {
-    [[WBShareKit mainShare] setDelegate:self];
+//    [[WBShareKit mainShare] setDelegate:self];
     [[WBShareKit mainShare] startSinaOauthWithSelector:@selector(sinaSuccess:) withFailedSelector:@selector(sinaError:)];
 }
 
@@ -56,7 +56,7 @@
 }
 
 - (IBAction)StartDouban:(id)sender {
-    [[WBShareKit mainShare] setDelegate:self];
+//    [[WBShareKit mainShare] setDelegate:self];
     [[WBShareKit mainShare] startDoubanOauthWithSelector:@selector(doubanSuccess:) withFailedSelector:@selector(doubanError:)];
 }
 
@@ -65,7 +65,7 @@
 }
 
 - (IBAction)StartTX:(id)sender {
-    [[WBShareKit mainShare] setDelegate:self];
+//    [[WBShareKit mainShare] setDelegate:self];
     [[WBShareKit mainShare] startTxOauthWithSelector:@selector(txSuccess:) withFailedSelector:@selector(txError:)];
 }
 
@@ -78,7 +78,7 @@
 }
 
 - (IBAction)StartTwitter:(id)sender {
-    [[WBShareKit mainShare] setDelegate:self];
+//    [[WBShareKit mainShare] setDelegate:self];
     [[WBShareKit mainShare] startTwitterOauthWithSelector:@selector(twitterSuccess:) withFailedSelector:@selector(twitterError:)];
 }
 
@@ -87,7 +87,7 @@
 }
 
 - (IBAction)StartWy:(id)sender {
-    [[WBShareKit mainShare] setDelegate:self];
+//    [[WBShareKit mainShare] setDelegate:self];
     [[WBShareKit mainShare] startWyOauthWithSelector:@selector(wySuccess:) withFailedSelector:@selector(wyError:)];
 }
 
@@ -100,16 +100,7 @@
 }
 
 
-#pragma mark sina delegate
-- (void)sinaSuccess:(NSData *)_data
-{
-    NSLog(@"sina ok:%@",_data);
-}
-
-- (void)sinaError:(NSError *)_error
-{
-    NSLog(@"sina error:%@",_error);
-}
+#pragma mark sina&163&tx&twitter delegate
 
 - (void)sendRecordTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data
 {
@@ -126,15 +117,6 @@
 }
 
 #pragma mark douban delegate
-- (void)doubanSuccess:(NSData *)_data
-{
-    NSLog(@"douban ok:%@",_data);
-}
-
-- (void)doubanError:(NSError *)_error
-{
-    NSLog(@"douban error:%@",_error);
-}
 
 - (void)sendDoubanShuoTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data
 {
@@ -150,37 +132,5 @@
     
 }
 
-#pragma mark tx delegate
-- (void)txSuccess:(NSData *)_data
-{
-    NSLog(@"tx ok:%@",_data);
-}
-
-- (void)txError:(NSError *)_error
-{
-    NSLog(@"tx error:%@",_error);
-}
-
-#pragma mark twitter delegate
-- (void)twitterSuccess:(NSData *)_data
-{
-    NSLog(@"twitter ok:%@",_data);
-}
-
-- (void)twitterError:(NSError *)_error
-{
-    NSLog(@"twitter error:%@",_error);
-}
-
-#pragma mark 163 delegate
-- (void)wySuccess:(NSData *)_data
-{
-    NSLog(@"wy ok:%@",_data);
-}
-
-- (void)wyError:(NSError *)_error
-{
-    NSLog(@"wy error:%@",_error);
-}
 
 @end

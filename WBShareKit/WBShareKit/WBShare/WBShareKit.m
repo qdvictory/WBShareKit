@@ -33,12 +33,12 @@ static WBShareKit *_shareKit;
 	return [_str stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
 }
 
-#pragma mark setDelegate
-- (void)setDelegate:(id)delegate
-{
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    [NSKeyedArchiver archiveRootObject:delegate toFile:path];
-}
+//#pragma mark setDelegate
+//- (void)setDelegate:(id)delegate
+//{
+//    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
+//    [NSKeyedArchiver archiveRootObject:delegate toFile:path];
+//}
 
 #pragma mark 获得时间戳
 - (NSString *)_generateTimestamp 
@@ -375,9 +375,8 @@ static WBShareKit *_shareKit;
 - (void)sinaAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
 	NSLog(@"sina 获取access token失败 错误:%@",error);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
 }
 
@@ -391,8 +390,8 @@ static WBShareKit *_shareKit;
     
     NSLog(@"获取access token:%@",responseBody);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
     
 //    [responseBody release];
@@ -626,9 +625,8 @@ static WBShareKit *_shareKit;
 - (void)doubanAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
 	NSLog(@"douban 获取access token失败 错误:%@",error);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
 }
 
@@ -642,8 +640,8 @@ static WBShareKit *_shareKit;
     
     NSLog(@"获取access token:%@",responseBody);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
     
 //    [responseBody release];
@@ -784,9 +782,8 @@ static WBShareKit *_shareKit;
 - (void)txAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
 	NSLog(@"tx 获取access token失败 错误:%@",error);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
 }
 
@@ -800,8 +797,8 @@ static WBShareKit *_shareKit;
     
     NSLog(@"获取access token:%@",responseBody);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
     
 //    [responseBody release];
@@ -1036,9 +1033,8 @@ static WBShareKit *_shareKit;
 - (void)twitterAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
 	NSLog(@"twitter 获取access token失败 错误:%@",error);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
 }
 
@@ -1052,8 +1048,8 @@ static WBShareKit *_shareKit;
 
     NSLog(@"获取access token:%@",responseBody);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
 //    [responseBody release];
 }
@@ -1158,9 +1154,8 @@ static WBShareKit *_shareKit;
 - (void)wyAccessTokenTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error {
 	NSLog(@"wy 获取access token失败 错误:%@",error);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_ESel"]) withObject:error];
 }
 
@@ -1174,8 +1169,8 @@ static WBShareKit *_shareKit;
     
     NSLog(@"获取access token:%@",responseBody);
     
-    NSString *path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"WBShareKit.delegate"];
-    id delegate = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+//    NSUserDefaults *info = [NSUserDefaults standardUserDefaults];
+    id delegate = [[UIApplication sharedApplication] delegate];
     [delegate performSelector:NSSelectorFromString([info valueForKey:@"WBShareKit_SSel"]) withObject:data];
     
     //    [responseBody release];

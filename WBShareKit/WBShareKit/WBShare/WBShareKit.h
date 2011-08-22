@@ -19,7 +19,7 @@
     SEL _failSEL;
 }
 + (WBShareKit *)mainShare;
-- (void)setDelegate:(id)delegate;
+//- (void)setDelegate:(id)delegate;
 - (void)handleOpenURL:(NSURL *)url;
 
 #pragma mark sina
