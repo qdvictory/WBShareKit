@@ -7,6 +7,19 @@
         [[WBShareKit mainShare] handleOpenURL:url];   
         return YES;
     }
+    
+    - (void)sinaSuccess:(NSData *)_data
+    {
+        NSLog(@"sina ok:%@",_data);
+    }
+
+    - (void)sinaError:(NSError *)_error
+    {
+        NSLog(@"sina error:%@",_error);
+    }
+    
+    //[[WBShareKit mainShare] startSinaOauthWithSelector:@selector(sinaSuccess:) withFailedSelector:@selector(sinaError:)];
+    //如上认证代码添加的@selector也将会在此调用
 
 3.在info.plist中修改url types
 
