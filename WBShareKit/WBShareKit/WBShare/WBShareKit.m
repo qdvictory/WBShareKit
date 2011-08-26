@@ -414,7 +414,7 @@ static WBShareKit *_shareKit;
 	if (_lng != 0) {
 		[body appendFormat:@"&long=%f",_lng];
 	}
-    
+	
 	OAMutableURLRequest *request = [self sinaRequestWithURL:url
 													dic:nil 
 												 method:@"POST"];
