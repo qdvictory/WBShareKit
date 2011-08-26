@@ -410,7 +410,7 @@ static WBShareKit *_shareKit;
 	}
     if (_lat != 0) {
 		[body appendFormat:@"&lat=%f",_lat];
-	}
+	} 
 	if (_lng != 0) {
 		[body appendFormat:@"&long=%f",_lng];
 	}
