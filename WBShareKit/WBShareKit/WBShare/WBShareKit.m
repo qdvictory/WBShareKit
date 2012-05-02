@@ -429,11 +429,10 @@ static WBShareKit *_shareKit;
 	
 	[request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
 }
@@ -529,11 +528,10 @@ static WBShareKit *_shareKit;
     
     [request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_successSEL
-                      didFailSelector:_failSEL];
+                      didFailSelector:_failSEL] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
 }
@@ -676,11 +674,10 @@ static WBShareKit *_shareKit;
 	
     //	[request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
 }
@@ -841,11 +838,10 @@ static WBShareKit *_shareKit;
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
 
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
     
@@ -933,11 +929,10 @@ static WBShareKit *_shareKit;
     [request setHTTPBody:postbody];
     
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
     [parameters release];
@@ -1086,11 +1081,10 @@ static WBShareKit *_shareKit;
 	
 	[request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
 //    [addRecordFetcher release];
 }
@@ -1208,11 +1202,10 @@ static WBShareKit *_shareKit;
 	
 	[request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_sSel
-                      didFailSelector:_eSel];
+                      didFailSelector:_eSel] autorelease];
 	[addRecordFetcher start];
     //    [addRecordFetcher release];
 }
@@ -1291,11 +1284,10 @@ static WBShareKit *_shareKit;
     
     [request prepare];
 	
-	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] init] autorelease];
-	[addRecordFetcher initWithRequest:request 
+	OAAsynchronousDataFetcher *addRecordFetcher = [[[OAAsynchronousDataFetcher alloc] initWithRequest:request 
                              delegate:_delegate
                     didFinishSelector:_successSEL
-                      didFailSelector:_failSEL];
+                      didFailSelector:_failSEL] autorelease];
 	[addRecordFetcher start];
     //    [addRecordFetcher release];
 }
