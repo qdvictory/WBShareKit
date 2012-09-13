@@ -1,46 +1,17 @@
-1.WBShareKey.h中修改配置信息
+1.CHShareManager.m中修改配置信息
 
-2.app delegate中添加
+2.qq登录时回调url换成 qq.com
+  sina无需修改
 
-    - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
-    {
-        [[WBShareKit mainShare] handleOpenURL:url];   
-        return YES;
-    }
-    
-    - (void)sinaSuccess:(NSData *)_data
-    {
-        NSLog(@"sina ok:%@",_data);
-    }
+3.添加Security.framework
 
-    - (void)sinaError:(NSError *)_error
-    {
-        NSLog(@"sina error:%@",_error);
-    }
-    
-    //[[WBShareKit mainShare] startSinaOauthWithSelector:@selector(sinaSuccess:) withFailedSelector:@selector(sinaError:)];
-    //如上认证代码添加的@selector也将会在此调用
+4.调用查看WBShareKitViewController.m
 
-3.在info.plist中修改url types
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <array>
-    	<dict>
-    		<key>CFBundleTypeRole</key>
-    		<string>Editor</string>
-    		<key>CFBundleURLName</key>
-    		<string>minroad.com</string>
-    		<key>CFBundleURLSchemes</key>
-    		<array>
-    			<string>oauth</string>
-    		</array>
-    	</dict>
-    </array>
-    </plist>
-
-4.具体调用请查看WBShareKitViewController.m
+5.新版WBShareKit只是将 
+    [http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/doc/Connect_IOS_SDK__V1.2.zip](http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/doc/Connect_IOS_SDK__V1.2.zip)
+与
+    [http://code.google.com/p/sinaweibosdkforoauth2/downloads/list](http://code.google.com/p/sinaweibosdkforoauth2/downloads/list)
+合并，时间紧凑，代码有些乱，见谅
 
 更多信息
 

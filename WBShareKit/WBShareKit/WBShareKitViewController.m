@@ -7,6 +7,7 @@
 //
 
 #import "WBShareKitViewController.h"
+#import "CHShareManager.h"
 
 @implementation WBShareKitViewController
 
@@ -20,13 +21,13 @@
 
 #pragma mark - View lifecycle
 
-/*
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 }
-*/
+
 
 - (void)viewDidUnload
 {
@@ -41,96 +42,48 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)StartSina:(id)sender {
-//    [[WBShareKit mainShare] setDelegate:self];
-    [[WBShareKit mainShare] startSinaOauthWithSelector:@selector(sinaSuccess:) withFailedSelector:@selector(sinaError:)];
+#pragma mark -
+
+- (IBAction)sinaSend:(id)sender {
+    if (![[CHShareManager mainManager] sinaIsVailed]) {
+        [[CHShareManager mainManager] showLoginOnViewController:self type:@"sina" finish:@selector(logInDidFinished:) failed:@selector(logInDidFailed:Error:)];
+    }
+    else{
+        [[CHShareManager mainManager] sendWeibo:@"WBShareKit test" image:nil type:@"sina" vc:self finish:@selector(sendDidFinished:) failed:@selector(sendDidError:)];
+    }
+    
 }
 
-- (IBAction)StartSendSinaWeibo:(id)sender {
-    [[WBShareKit mainShare] sendSinaRecordWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
+- (IBAction)qqSend:(id)sender {
+    if (![[CHShareManager mainManager] qqIsVailed]) {
+        [[CHShareManager mainManager] showLoginOnViewController:self type:@"qq" finish:@selector(logInDidFinished:) failed:@selector(logInDidFailed:error:)];
+    }
+    else
+    {
+        [[CHShareManager mainManager] sendWeibo:@"WBShareKit test" image:nil type:@"qq" vc:self finish:@selector(sendDidFinished:) failed:@selector(sendDidError:)];//暂时不支持发送图片，可利用分享api传入image url来实现发送目的。
+    }
 }
 
-- (IBAction)StartSinaPhotoWeibo:(id)sender {
-    NSLog(@"%@",[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"]);
-    [[WBShareKit mainShare] sendSinaPhotoWithStatus:@"WBShareKit Photo test" lat:0 lng:0 path:[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"] delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-- (IBAction)StartDouban:(id)sender {
-//    [[WBShareKit mainShare] setDelegate:self];
-    [[WBShareKit mainShare] startDoubanOauthWithSelector:@selector(doubanSuccess:) withFailedSelector:@selector(doubanError:)];
-}
-
-- (IBAction)StartSendDoubanShuo:(id)sender {
-    [[WBShareKit mainShare] sendDoubanShuoWithStatus:@"WBShareKit test" delegate:self successSelector:@selector(sendDoubanShuoTicket:finishedWithData:) failSelector:@selector(sendDoubanShuoTicket:failedWithError:)];
-}
-
-- (IBAction)StartTX:(id)sender {
-//    [[WBShareKit mainShare] setDelegate:self];
-    [[WBShareKit mainShare] startTxOauthWithSelector:@selector(txSuccess:) withFailedSelector:@selector(txError:)];
-}
-
-- (IBAction)StartTXWeibo:(id)sender {
-    [[WBShareKit mainShare] sendTxRecordWithStatus:@"WBShareKit test" lat:0 lng:0 format:@"json" delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-- (IBAction)StartTXPhotoWeibo:(id)sender {
-    [[WBShareKit mainShare] sendTxRecordWithStatus:@"WBShareKit Photo test" lat:0 lng:0 format:@"json" path:[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"] delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-- (IBAction)StartTwitter:(id)sender {
-//    [[WBShareKit mainShare] setDelegate:self];
-    [[WBShareKit mainShare] startTwitterOauthWithSelector:@selector(twitterSuccess:) withFailedSelector:@selector(twitterError:)];
-}
-
-- (IBAction)StartSendTwitter:(id)sender {
-    [[WBShareKit mainShare] sendTwitterWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-- (IBAction)StartWy:(id)sender {
-//    [[WBShareKit mainShare] setDelegate:self];
-    [[WBShareKit mainShare] startWyOauthWithSelector:@selector(wySuccess:) withFailedSelector:@selector(wyError:)];
-}
-
-- (IBAction)StartSendWyWeibo:(id)sender {
-    [[WBShareKit mainShare] sendWyRecordWithStatus:@"WBShareKit test" lat:0 lng:0 delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-- (IBAction)StartSendWyPhotoWeibo:(id)sender {
-    [[WBShareKit mainShare] sendWyPhotoWithStatus:@"WBShareKit Photo test" lat:0 lng:0 path:[[NSBundle mainBundle] pathForResource:@"WBShareKit" ofType:@"png"] delegate:self successSelector:@selector(sendRecordTicket:finishedWithData:) failSelector:@selector(sendRecordTicket:failedWithError:)];
-}
-
-
-#pragma mark sina&163&tx&twitter delegate
-
-- (void)sendRecordTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data
+#pragma mark - api delegate
+- (void)logInDidFinished:(WBEngine *)_engine
 {
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",string);
-    UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"发送微博成功" message:string delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"登录成功" message:_engine.snsType delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
     [al show];
     [al release];
-    
 }
-- (void)sendRecordTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error
+
+- (void)logInDidFailed:(WBEngine *)_engine error:(NSError *)_error
 {
     
 }
 
-#pragma mark douban delegate
-
-- (void)sendDoubanShuoTicket:(OAServiceTicket *)ticket finishedWithData:(NSMutableData *)data
+- (void)sendDidFinished:(id)_result
 {
-    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",[string URLDecodedString]);
-    UIAlertView *al = [[UIAlertView alloc] initWithTitle:@"发送豆瓣说成功" message:string delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [al show];
-    [al release];
-    
-}
-- (void)sendDoubanShuoTicket:(OAServiceTicket *)ticket failedWithError:(NSError *)error
-{
-    
+    NSLog(@"send did finished:%@",_result);
 }
 
-
+- (void)sendDidError:(NSError *)_error
+{
+    NSLog(@"%@",_error);
+}
 @end

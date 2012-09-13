@@ -7,20 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WBShareKit.h"
+//#import "WBShareKit.h"
 
 @interface WBShareKitViewController : UIViewController
-- (IBAction)StartSina:(id)sender;
-- (IBAction)StartSendSinaWeibo:(id)sender;
-- (IBAction)StartSinaPhotoWeibo:(id)sender;
-- (IBAction)StartDouban:(id)sender;
-- (IBAction)StartSendDoubanShuo:(id)sender;
-- (IBAction)StartTX:(id)sender;
-- (IBAction)StartTXWeibo:(id)sender;
-- (IBAction)StartTXPhotoWeibo:(id)sender;
-- (IBAction)StartTwitter:(id)sender;
-- (IBAction)StartSendTwitter:(id)sender;
-- (IBAction)StartWy:(id)sender;
-- (IBAction)StartSendWyWeibo:(id)sender;
-- (IBAction)StartSendWyPhotoWeibo:(id)sender;
+//- (IBAction)StartSina:(id)sender;
+//- (IBAction)StartSendSinaWeibo:(id)sender;
+//- (IBAction)StartSinaPhotoWeibo:(id)sender;
+//- (IBAction)StartDouban:(id)sender;
+//- (IBAction)StartSendDoubanShuo:(id)sender;
+//- (IBAction)StartTX:(id)sender;
+//- (IBAction)StartTXWeibo:(id)sender;
+//- (IBAction)StartTXPhotoWeibo:(id)sender;
+//- (IBAction)StartTwitter:(id)sender;
+//- (IBAction)StartSendTwitter:(id)sender;
+//- (IBAction)StartWy:(id)sender;
+//- (IBAction)StartSendWyWeibo:(id)sender;
+//- (IBAction)StartSendWyPhotoWeibo:(id)sender;
+- (IBAction)sinaSend:(id)sender;
+- (IBAction)qqSend:(id)sender;
+
 @end

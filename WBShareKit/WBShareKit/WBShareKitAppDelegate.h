@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WBShareKit.h"
+
 
 @class WBShareKitViewController;
 
