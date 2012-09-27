@@ -1,7 +1,9 @@
 1.CHShareManager.m中修改配置信息
 
-2.qq登录时回调url换成 qq.com
-  sina无需修改
+2.修改qq回调地址 
+WBAuthorizeWebView.m 
+#define kQQCallback @"qq.com"
+sina无需修改
 
 3.添加Security.framework
 

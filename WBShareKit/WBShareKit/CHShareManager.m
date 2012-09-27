@@ -12,6 +12,7 @@
 #define kQQAppkey @"100304947"
 #define kQQSecret @"" 
 
+
 @implementation CHShareManager
 static CHShareManager *_console;
 

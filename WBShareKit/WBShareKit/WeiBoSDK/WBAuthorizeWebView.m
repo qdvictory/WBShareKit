@@ -22,6 +22,8 @@
 #import "NSString+URLEncoding.h"
 #import "SFHFKeychainUtils.h"
 
+#define kQQCallback @"qq.com"
+
 @interface WBAuthorizeWebView (Private)
 
 - (void)bounceOutAnimationStopped;
@@ -369,7 +371,7 @@
 //            return YES;
 //        }
 //        else
-        if ([request.URL.host isEqualToString:@"qq.com"])
+        if ([request.URL.host isEqualToString:kQQCallback])
         {
             NSURL* url = request.URL;
             NSRange start = [[url absoluteString] rangeOfString:@"access_token="];
