@@ -2,7 +2,7 @@
 
 2.修改qq回调地址 
 WBAuthorizeWebView.m 
-#define kQQCallback @"qq.com"
+define kQQCallback @"qq.com"
 sina无需修改
 
 3.添加Security.framework
