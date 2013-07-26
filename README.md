@@ -20,6 +20,7 @@
     </plist>
     
 2.在`- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url`中添加回调
+
     #import "CHShareManager.h"
     
     - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
