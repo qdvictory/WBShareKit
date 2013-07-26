@@ -7,10 +7,7 @@
 //
 
 #import "CHShareManager.h"
-#define kWBAppkey @"2396343608"
-#define kWBSecret @"bb5bdc7df7609a13ffdf7201c32de2b0"
-#define kQQAppkey @"100304947"
-#define kQQSecret @"" 
+#import "URLParser.h"
 
 
 @implementation CHShareManager
@@ -77,6 +74,8 @@ static CHShareManager *_console;
 
 - (void)showLoginOnViewController:(UIViewController *)_vc type:(NSString *)_type finish:(SEL)_success failed:(SEL)_failed
 {
+    
+    
     [vc release];
     vc = nil;
     vc = [_vc retain];
@@ -87,6 +86,7 @@ static CHShareManager *_console;
     WBEngine *e = nil;
     if ([_type isEqualToString:@"sina"]) {
         e = sinaEngine;
+//        e.redirectURI = @"oauth://minroad.com"
     }
     else if ([_type isEqualToString:@"qq"])
     {
@@ -94,6 +94,15 @@ static CHShareManager *_console;
     }
     
 //    [e setRootViewController:vc];
+    
+    if ([_type isEqualToString:@"sina"]) {
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:kSinaSSOUrl]]) {
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@&callback_uri=%@",kSinaSSOUrl,kWBAppkey,@"http://",[NSString stringWithFormat:@"wb%@://minroad.com",kWBAppkey]]];
+            [[UIApplication sharedApplication] openURL:url];
+            return;
+        }
+    }
+    
     [e logIn];
 }
 
@@ -140,6 +149,21 @@ static CHShareManager *_console;
     
 }
 
+#pragma mark -
+- (void)handleOpenURL:(NSURL *)_url
+{
+    NSString *str = [NSString stringWithFormat:@"%@",_url];
+    
+    if ([str rangeOfString:@"user_cancelled"].location != NSNotFound) {
+        [sinaEngine authorize:nil didFailWithError:nil];
+    }
+    else
+    {
+        URLParser *parser = [[[URLParser alloc] initWithURLString:str] autorelease];
+        [sinaEngine authorize:nil didSucceedWithAccessToken:[parser valueForVariable:@"access_token"] userID:[parser valueForVariable:@"uid"] expiresIn:[[parser valueForVariable:@"expires_in"] intValue]];
+    }
+}
+
 #pragma mark - wbengine
 - (void)engineAlreadyLoggedIn:(WBEngine *)engine
 {
@@ -167,6 +191,7 @@ static CHShareManager *_console;
     [vc release];
     vc = nil;
 }
+
 
 - (void)engineDidLogOut:(WBEngine *)engine
 {

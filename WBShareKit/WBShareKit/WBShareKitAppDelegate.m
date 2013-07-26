@@ -9,6 +9,7 @@
 #import "WBShareKitAppDelegate.h"
 
 #import "WBShareKitViewController.h"
+#import "CHShareManager.h"
 
 @implementation WBShareKitAppDelegate
 
@@ -17,11 +18,12 @@
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-//	NSLog(@"获得已授权的key:%@",url);
+	NSLog(@"获得已授权的key:%@",url);
     
-//    [[WBShareKit mainShare] handleOpenURL:url];
-    
-    
+    if ([[url scheme] isEqualToString:[NSString stringWithFormat:@"wb%@",kWBAppkey]])
+    {
+        [[CHShareManager mainManager] handleOpenURL:url];
+    }
     return YES;
 }
 

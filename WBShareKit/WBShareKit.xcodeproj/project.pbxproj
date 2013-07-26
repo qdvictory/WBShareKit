@@ -19,6 +19,7 @@
 		65DB245013F02B8300B59C2F /* WBShareKit.png in Resources */ = {isa = PBXBuildFile; fileRef = 65DB244F13F02B8300B59C2F /* WBShareKit.png */; };
 		65EB81A713F17A94000CA36C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 65EB81A513F17A94000CA36C /* Icon.png */; };
 		65EB81A813F17A94000CA36C /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 65EB81A613F17A94000CA36C /* Icon@2x.png */; };
+		F11A3F8917A24E6B0088845A /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F11A3F8817A24E6B0088845A /* URLParser.m */; };
 		F1AFEC1516020B5100BCF466 /* CHShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFEBED16020B5100BCF466 /* CHShareManager.m */; };
 		F1AFEC1616020B5100BCF466 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = F1AFEBF116020B5100BCF466 /* GTMBase64.m */; };
 		F1AFEC1716020B5100BCF466 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AFEBF516020B5100BCF466 /* bg.png */; };
@@ -71,6 +72,8 @@
 		65DB244F13F02B8300B59C2F /* WBShareKit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WBShareKit.png; sourceTree = "<group>"; };
 		65EB81A513F17A94000CA36C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		65EB81A613F17A94000CA36C /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		F11A3F8717A24E6B0088845A /* URLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLParser.h; sourceTree = "<group>"; };
+		F11A3F8817A24E6B0088845A /* URLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLParser.m; sourceTree = "<group>"; };
 		F1AFEBEC16020B5100BCF466 /* CHShareManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHShareManager.h; sourceTree = "<group>"; };
 		F1AFEBED16020B5100BCF466 /* CHShareManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHShareManager.m; sourceTree = "<group>"; };
 		F1AFEBF016020B5100BCF466 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 		65DB23EE13F0106900B59C2F = {
 			isa = PBXGroup;
 			children = (
+				F11A3F8717A24E6B0088845A /* URLParser.h */,
+				F11A3F8817A24E6B0088845A /* URLParser.m */,
 				F1AFEC441602192500BCF466 /* Security.framework */,
 				F1AFEC411602190A00BCF466 /* NSString+URLEncoding.h */,
 				F1AFEC421602190A00BCF466 /* NSString+URLEncoding.m */,
@@ -393,6 +398,7 @@
 				F1AFEC3B1602187D00BCF466 /* NSObject+SBJSON.m in Sources */,
 				F1AFEC3C1602187D00BCF466 /* NSString+SBJSON.m in Sources */,
 				F1AFEC3D1602187D00BCF466 /* SBJSON.m in Sources */,
+				F11A3F8917A24E6B0088845A /* URLParser.m in Sources */,
 				F1AFEC3E1602187D00BCF466 /* SBJsonBase.m in Sources */,
 				F1AFEC3F1602187D00BCF466 /* SBJsonParser.m in Sources */,
 				F1AFEC401602187D00BCF466 /* SBJsonWriter.m in Sources */,
@@ -476,6 +482,7 @@
 		65DB241B13F0106900B59C2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Min Ding (CE72H5XSZ9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WBShareKit/WBShareKit-Prefix.pch";
 				GCC_VERSION = "";
