@@ -30,7 +30,7 @@
             [[CHShareManager mainManager] handleOpenURL:url];
         }
         return YES;
-    }
+    }    
 
 3.CHShareManager.h中修改配置信息
 
