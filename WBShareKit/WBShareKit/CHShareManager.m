@@ -154,7 +154,7 @@ static CHShareManager *_console;
 {
     NSString *str = [NSString stringWithFormat:@"%@",_url];
     
-    if ([str rangeOfString:@"user_cancelled"].location != NSNotFound) {
+    if ([str rangeOfString:@"access_token"].location == NSNotFound) {
         [sinaEngine authorize:nil didFailWithError:nil];
     }
     else
